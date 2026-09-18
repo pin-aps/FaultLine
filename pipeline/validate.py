@@ -2,6 +2,9 @@ import pandas as pd
 import geopandas as gpd
 from pathlib import Path
 
+#function to validate the USGS earthquake data, GPS station data, and fault geometry data. 
+# It checks for nulls, date coverage, coordinate sanity, and depth checks for the earthquake data; checks for gaps in the GPS station data; 
+# and checks the coordinate reference system and geometry validity for the fault geometry data.
 def validate_usgs(path="data/raw/usgs_2016_2026.parquet"):
     print("=== USGS Earthquake Data ===")
     df = pd.read_parquet(path)
@@ -47,7 +50,7 @@ def validate_usgs(path="data/raw/usgs_2016_2026.parquet"):
 
     print()
 
-
+#function to validate the GPS station data, checking for the number of rows, number of stations, and any large gaps in the time series for each station.
 def validate_gps(path="data/raw/gps_raw.parquet"):
     print("=== GPS Station Data ===")
     df = pd.read_parquet(path)
@@ -68,7 +71,7 @@ def validate_gps(path="data/raw/gps_raw.parquet"):
 
     print()
 
-
+#function to validate the fault geometry data, checking the number of segments, the coordinate reference system, and the validity of the geometries.
 def validate_faults(path="data/raw/san_andreas_faults.geojson"):
     print("=== Fault Geometry ===")
     gdf = gpd.read_file(path)
@@ -77,7 +80,6 @@ def validate_faults(path="data/raw/san_andreas_faults.geojson"):
     print(f"Coordinate reference system: {gdf.crs}")
 
     # CRS should be EPSG:4326 (standard lat/lng WGS84)
-    # If it's something else, you'll need to reproject before spatial joins
     if str(gdf.crs) != "EPSG:4326":
         print(f"WARNING — unexpected CRS. Reproject with gdf.to_crs('EPSG:4326')")
     else:
@@ -92,7 +94,7 @@ def validate_faults(path="data/raw/san_andreas_faults.geojson"):
 
     print()
 
-
+#main block to run all validations for USGS earthquake data, GPS station data, and fault geometry data.
 if __name__ == "__main__":
     validate_usgs()
     validate_gps()

@@ -5,12 +5,10 @@ import time
 import io
 
 # University of Nevada Reno (UNR) Nevada Geodetic Laboratory
-# Fully public, no login required, 13,000+ stations worldwide
 # IGS14 reference frame — covers up to Aug 2024 (then IGS20 takes over)
-# We use IGS14 because it has the longest complete history for our stations
 BASE_URL = "https://geodesy.unr.edu/gps_timeseries/IGS14/tenv3/IGS14"
 
-# San Andreas fault GPS stations — all confirmed in UNR's network
+# San Andreas fault GPS stations
 STATIONS = {
     "CMBB": "Columbia (N. Sierra)",
     "HOPB": "Hopland",
@@ -34,11 +32,8 @@ def fetch_station(station_code, station_name):
                reflon, e0, east, n0, north, u0, up,
                ant, sig_e, sig_n, sig_u, corr_en, corr_eu, corr_nu
     
-    We care about: east, north, up (displacement in meters from reference)
-    and sig_e, sig_n, sig_u (uncertainties)
-    
     Why IGS14 not IGS20? IGS20 is newer but UNR is still reprocessing their
-    full archive into it. IGS14 gives us the complete 2010-2024 history we need.
+    full archive into it. IGS14 gives the complete 2010-2024 history needed.
     """
     # UNR uses uppercase station codes in the URL
     code = station_code.upper()
@@ -125,7 +120,7 @@ def fetch_station(station_code, station_name):
     print(f"{len(df):,} days ({df['date'].min().date()} to {df['date'].max().date()})")
     return df
 
-
+#function to fetch all stations, iterating through the STATIONS dictionary and calling fetch_station for each one.
 def fetch_all_stations():
     all_dfs = []
 
@@ -145,7 +140,7 @@ def fetch_all_stations():
     print(combined.groupby("station_code")["date"].agg(["min", "max", "count"]).to_string())
     return combined
 
-
+#main block to test fetching a single station and then all stations, saving the combined data to a Parquet file.
 if __name__ == "__main__":
     print("Testing with single station (BKMS - Parkfield)...")
     test = fetch_station("BKMS", "Parkfield")

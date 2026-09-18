@@ -15,17 +15,7 @@ CA_BOUNDS = {
 def fetch_one_quarter(year, quarter, min_magnitude=1.5):
     """
     Fetches one quarter of one year at a time.
-    
-    Why quarters instead of full years? Two reasons:
-    1. California generates ~40,000+ M>=1.0 quakes per year, which risks
-       hitting the API's 20,000 event cap and silently truncating data.
-    2. Smaller requests are less likely to time out or get rejected.
-    
-    Why min_magnitude=1.5 instead of 1.0? The catalog below M1.5 is
-    incomplete in many parts of California — sensors don't reliably
-    detect everything that small, so including them would introduce
-    misleading gaps that look like "no activity" but actually mean
-    "no sensor nearby." M1.5 gives us a complete, trustworthy catalog.
+    Chose this so i dont hit 20,000 event limit and so that requests are smaller and less likely to time out.
     """
     quarter_starts = ["01-01", "04-01", "07-01", "10-01"]
     quarter_ends   = ["04-01", "07-01", "10-01", "01-01"]
@@ -47,8 +37,7 @@ def fetch_one_quarter(year, quarter, min_magnitude=1.5):
 
     response = requests.get(BASE_URL, params=params, timeout=60)
 
-    # If the API rejects the request, print exactly what it says
-    # before raising the error — this is how you debug 400 errors
+#error catch if api is rejected due to too many requests or other issues. This will print the first 500 characters of the error message for debugging.
     if response.status_code == 400:
         print(f"\nAPI rejected request. Response body:")
         print(response.text[:500])  # first 500 chars of error message
@@ -58,6 +47,8 @@ def fetch_one_quarter(year, quarter, min_magnitude=1.5):
 
     features = response.json()["features"]
 
+#records is a list of dictionaries, each representing an earthquake event with relevant properties extracted from the API response. 
+# The function returns a pandas DataFrame constructed from this list of records.
     records = []
     for f in features:
         p = f["properties"]
@@ -77,6 +68,8 @@ def fetch_one_quarter(year, quarter, min_magnitude=1.5):
     return pd.DataFrame(records)
 
 
+#function to fetch all years of data from the USGS API, iterating through each year and quarter, and concatenating the results into a single DataFrame. 
+# It also prints summary statistics about the fetched data.
 def fetch_all_years(start_year=2016, end_year=2026, min_magnitude=1.5):
     all_dfs = []
     total = 0
@@ -89,7 +82,7 @@ def fetch_all_years(start_year=2016, end_year=2026, min_magnitude=1.5):
             df = fetch_one_quarter(year, q, min_magnitude)
             print(f"{len(df):,} events")
             year_dfs.append(df)
-            time.sleep(0.5)  # be polite to the API
+            time.sleep(0.5)  
 
         year_df = pd.concat(year_dfs, ignore_index=True)
         total += len(year_df)

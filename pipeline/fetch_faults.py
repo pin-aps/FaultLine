@@ -8,7 +8,6 @@ import io
 # This is the authoritative national fault database, updated regularly,
 # and has a working GeoJSON API. It covers all of California's active faults
 # and is what USGS uses for their own hazard maps.
-# No login required, stable endpoint.
 USGS_FAULT_URL = "https://earthquake.usgs.gov/static/lfs/nshm/qfaults/Qfaults_GIS.zip"
 
 
@@ -16,19 +15,12 @@ def fetch_fault_geometry():
     """
     Downloads the USGS Quaternary Fault database for California.
     
-    This is a zipped shapefile — geopandas can read it directly from
-    the zip URL without extracting it manually.
-    
-    Why USGS instead of SCEC CFM?
-    The CFM is a 3D model stored in a proprietary format (gocad tsurf)
-    that requires specialized software to parse. The USGS Quaternary
-    fault database gives us the same 2D fault traces we need for
+    The USGS Quaternary fault database gives us the same 2D fault traces we need for
     mapping and spatial joins, in a standard format, with no parsing
-    complexity. For our purposes (assigning earthquakes to fault segments
-    and visualizing on a map) it's equivalent.
+    complexity. 
     """
     print("Downloading USGS Quaternary Fault and Fold Database...")
-    print("(This is a ~10MB zip file, may take 30-60 seconds)")
+    print("(May take 30-60 seconds)")
 
     response = requests.get(USGS_FAULT_URL, timeout=120)
     response.raise_for_status()
@@ -38,7 +30,6 @@ def fetch_fault_geometry():
     zip_bytes = io.BytesIO(response.content)
 
     # geopandas reads zipped shapefiles using the zip:// prefix
-    # We need to save temporarily and read back
     zip_path = Path("data/raw/qfaults.zip")
     zip_path.parent.mkdir(parents=True, exist_ok=True)
     zip_path.write_bytes(response.content)
@@ -51,7 +42,7 @@ def fetch_fault_geometry():
     print(f"Columns: {list(faults.columns)}")
     print(f"CRS: {faults.crs}")
 
-    # Reproject to standard WGS84 lat/lng if needed
+    # Reproject to standard WGS84 lat/lng
     if faults.crs and faults.crs.to_epsg() != 4326:
         print(f"Reprojecting from {faults.crs} to EPSG:4326...")
         faults = faults.to_crs("EPSG:4326")
@@ -81,7 +72,7 @@ def fetch_fault_geometry():
 
     return ca_faults, san_andreas
 
-
+#main block to fetch the fault geometry and save it to GeoJSON files. It also cleans up the downloaded zip file after extracting the necessary data.
 if __name__ == "__main__":
     Path("data/raw").mkdir(parents=True, exist_ok=True)
 
@@ -97,7 +88,7 @@ if __name__ == "__main__":
     print(f"\nSaved {out_ca} ({out_ca.stat().st_size / 1e6:.1f} MB)")
     print(f"Saved {out_sa} ({out_sa.stat().st_size / 1e6:.1f} MB)")
 
-    # Clean up the zip file — we have the GeoJSONs now
+    # Clean up the zip file
     import time
 time.sleep(2)
 try:
