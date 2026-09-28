@@ -1,0 +1,96 @@
+{
+  "seq_len": 60,
+  "input_cols": [
+    "seismicity_rate_7d",
+    "seismicity_rate_30d",
+    "seismicity_rate_90d",
+    "seismicity_rate_30d_z",
+    "b_value",
+    "b_value_se",
+    "n_events",
+    "gps_strain_rate",
+    "gps_station_distance_km",
+    "b_value_missing",
+    "b_value_se_missing",
+    "b_value_reliable",
+    "gps_reliable",
+    "seg_0",
+    "seg_1",
+    "seg_2",
+    "seg_3",
+    "seg_4",
+    "seg_5",
+    "seg_6",
+    "seg_7",
+    "seg_8",
+    "seg_9"
+  ],
+  "numeric_params": {
+    "seismicity_rate_7d": {
+      "median": 1.0,
+      "mean": 2.4248496066635816,
+      "std": 7.389084381235771,
+      "add_missing_flag": false
+    },
+    "seismicity_rate_30d": {
+      "median": 3.0,
+      "mean": 10.339194817214253,
+      "std": 20.385519980338895,
+      "add_missing_flag": false
+    },
+    "seismicity_rate_90d": {
+      "median": 10.0,
+      "mean": 30.628412771864877,
+      "std": 46.476378742787126,
+      "add_missing_flag": false
+    },
+    "seismicity_rate_30d_z": {
+      "median": -0.16346714407473292,
+      "mean": -0.010459792515515326,
+      "std": 1.032408247443442,
+      "add_missing_flag": false
+    },
+    "b_value": {
+      "median": 0.9187179970469803,
+      "mean": 0.9211737197702196,
+      "std": 0.09933554255419345,
+      "add_missing_flag": true
+    },
+    "b_value_se": {
+      "median": 0.1372375357889031,
+      "mean": 0.14038153246025065,
+      "std": 0.0321053105144179,
+      "add_missing_flag": true
+    },
+    "n_events": {
+      "median": 3.0,
+      "mean": 11.146783896344285,
+      "std": 18.616894336974536,
+      "add_missing_flag": false
+    },
+    "gps_strain_rate": {
+      "median": 33.914253369621846,
+      "mean": 33.81457527541671,
+      "std": 9.345648789730479,
+      "add_missing_flag": false
+    },
+    "gps_station_distance_km": {
+      "median": 115.7084489415585,
+      "mean": 111.30794728367613,
+      "std": 62.52903567522442,
+      "add_missing_flag": false
+    }
+  },
+  "segment_ids": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9"
+  ]
+}
