@@ -1,0 +1,11 @@
+# Virtual environment and Python caches
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+
+# Local secrets
+.env
+
+# Generated outputs: recreated by running the notebooks in order
+data/processed/
+models/

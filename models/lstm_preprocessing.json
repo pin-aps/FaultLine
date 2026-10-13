@@ -10,6 +10,9 @@
     "n_events",
     "gps_strain_rate",
     "gps_station_distance_km",
+    "max_mag_7d",
+    "max_mag_30d",
+    "days_since_last_m35",
     "b_value_missing",
     "b_value_se_missing",
     "b_value_reliable",
@@ -78,6 +81,24 @@
       "median": 115.7084489415585,
       "mean": 111.30794728367613,
       "std": 62.52903567522442,
+      "add_missing_flag": false
+    },
+    "max_mag_7d": {
+      "median": 1.6,
+      "mean": 1.2398560851457658,
+      "std": 1.2017873266864423,
+      "add_missing_flag": false
+    },
+    "max_mag_30d": {
+      "median": 2.26,
+      "mean": 2.1551767700138824,
+      "std": 1.0735689402881905,
+      "add_missing_flag": false
+    },
+    "days_since_last_m35": {
+      "median": 724.0,
+      "mean": 476.640860712633,
+      "std": 291.7603523181032,
       "add_missing_flag": false
     }
   },
